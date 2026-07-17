@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>MANG SATRIA</title>
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#0b1424" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <style>
+        /* Reset & fullscreen */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0b1424;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial Black', 'Impact', 'Segoe UI Black', sans-serif;
+        }
+
+        /* Splash container */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, #1a2a4a, #060d1a);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            transition: opacity 0.8s ease-out;
+        }
+
+        /* Efek bintang */
+        #splash::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(2px 2px at 40% 70%, rgba(255,255,255,0.2), transparent),
+                radial-gradient(2px 2px at 60% 20%, rgba(255,255,255,0.4), transparent),
+                radial-gradient(2px 2px at 80% 80%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(2px 2px at 10% 90%, rgba(255,255,255,0.2), transparent),
+                radial-gradient(2px 2px at 90% 40%, rgba(255,255,255,0.3), transparent);
+            background-size: 200px 200px;
+            animation: twinkle 4s ease-in-out infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* ===== TEKS 3D EMAS BATANGAN ===== */
+        .splash-text {
+            font-size: clamp(3.5rem, 18vw, 10rem);
+            font-weight: 900;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            /* Gradasi emas metalik */
+            background: linear-gradient(180deg, #f5d742 0%, #d4a017 40%, #f5d742 60%, #b8860b 80%, #f5d742 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            /* Bayangan 3D tebal seperti emas batangan */
+            text-shadow:
+                0 0 15px rgba(245, 215, 66, 0.6),
+                0 0 30px rgba(245, 215, 66, 0.4),
+                0 0 60px rgba(245, 215, 66, 0.2),
+                0 8px 0 #8a6a10,
+                0 10px 20px rgba(0, 0, 0, 0.6),
+                0 18px 40px rgba(0, 0, 0, 0.5),
+                0 25px 60px rgba(0, 0, 0, 0.4);
+            transform: perspective(800px) rotateX(6deg) rotateY(-4deg);
+            animation:
+                float3D 2.4s ease-in-out infinite alternate,
+                goldShine 2.8s ease-in-out infinite;
+            user-select: none;
+            z-index: 2;
+            text-align: center;
+            line-height: 1.2;
+            padding: 0 20px;
+        }
+
+        /* Animasi 3D mengambang */
+        @keyframes float3D {
+            0% {
+                transform: perspective(800px) rotateX(6deg) rotateY(-4deg) translateY(0) scale(1);
+                text-shadow:
+                    0 0 15px rgba(245, 215, 66, 0.6),
+                    0 0 30px rgba(245, 215, 66, 0.4),
+                    0 8px 0 #8a6a10,
+                    0 12px 30px rgba(0, 0, 0, 0.6);
+            }
+            100% {
+                transform: perspective(800px) rotateX(-4deg) rotateY(6deg) translateY(-18px) scale(1.02);
+                text-shadow:
+                    0 0 25px rgba(245, 215, 66, 0.9),
+                    0 0 50px rgba(245, 215, 66, 0.6),
+                    0 0 80px rgba(245, 215, 66, 0.4),
+                    0 8px 0 #8a6a10,
+                    0 18px 40px rgba(0, 0, 0, 0.7);
+            }
+        }
+
+        /* Kilau emas bergerak (efek cahaya) */
+        @keyframes goldShine {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* Subtitle */
+        .splash-sub {
+            position: relative;
+            margin-top: 20px;
+            color: rgba(200, 210, 230, 0.5);
+            font-size: clamp(0.9rem, 2.5vw, 1.8rem);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 300;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            animation: fadeSub 2s ease-in-out infinite alternate;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        @keyframes fadeSub {
+            0% { opacity: 0.4; transform: translateY(0); }
+            100% { opacity: 0.9; transform: translateY(-4px); }
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: absolute;
+            bottom: 12%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(300px, 60%);
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f5d742, #ffaa00);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        #splash.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ===== NOTIFIKASI UPDATE ===== */
+        #updateNotification {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #f5d742;
+            color: #0b1424;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            align-items: center;
+            gap: 12px;
+            max-width: 90%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        #updateNotification button {
+            background: #0b1424;
+            color: #f5d742;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #updateNotification .close-btn {
+            background: transparent;
+            color: #0b1424;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            padding: 0 6px;
+        }
+
+        /* ===== TOMBOL INSTALL ===== */
+        #installBanner {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a2a4a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            z-index: 9998;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90%;
+        }
+        #installBanner button {
+            background: #f5d742;
+            color: #0b1424;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #installBanner .close-btn {
+            background: transparent;
+            color: white;
+            font-size: 20px;
+            border: none;
+            cursor: pointer;
+            padding: 0 6px;
+        }
+
+        /* Responsif */
+        @media (max-width: 480px) {
+            .splash-text {
+                font-size: clamp(2.8rem, 20vw, 4rem);
+                letter-spacing: 2px;
+            }
+            .splash-sub {
+                font-size: 0.8rem;
+                letter-spacing: 3px;
+            }
+            .progress-bar {
+                width: 70%;
+                bottom: 10%;
+            }
+            #installBanner, #updateNotification {
+                bottom: 10px;
+                padding: 10px 16px;
+                font-size: 13px;
+            }
+            #installBanner {
+                bottom: 60px;
+            }
+        }
+
+        @media (min-width: 1920px) {
+            .splash-text {
+                font-size: 12rem;
+                letter-spacing: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+        <div class="splash-text">MANG SATRIA</div>
+        <div class="splash-sub">✦ Streaming Radio ✦</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- NOTIFIKASI UPDATE -->
+    <div id="updateNotification">
+        <span>🔄 Update tersedia!</span>
+        <button id="updateBtn">Refresh Sekarang</button>
+        <button class="close-btn" id="closeUpdateBtn">✕</button>
+    </div>
+
+    <!-- TOMBOL INSTALL -->
+    <div id="installBanner">
+        <span>📲 Install Aplikasi</span>
+        <button id="installBtn">Install</button>
+        <button class="close-btn" id="closeInstallBtn">✕</button>
+    </div>
+
+    <script>
+        // ========== SERVICE WORKER REGISTRATION ==========
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('✅ SW registered'))
+                .catch(err => console.warn('SW registration failed:', err));
+        }
+
+        // ========== SPLASH + REDIRECT ==========
+        (function() {
+            const splash = document.getElementById('splash');
+            const progress = document.getElementById('progressFill');
+            const DURATION = 5000;
+            let startTime = performance.now();
+
+            function updateProgress() {
+                const elapsed = performance.now() - startTime;
+                const percent = Math.min((elapsed / DURATION) * 100, 100);
+                progress.style.width = percent + '%';
+
+                if (elapsed < DURATION) {
+                    requestAnimationFrame(updateProgress);
+                } else {
+                    splash.classList.add('fade-out');
+                    setTimeout(() => {
+                        window.location.href = 'https://radio.garden/';
+                    }, 800);
+                }
+            }
+            requestAnimationFrame(updateProgress);
+        })();
+
+        // ========== CEK UPDATE ==========
+        async function checkUpdate() {
+            try {
+                const response = await fetch('/version.json?t=' + Date.now());
+                if (!response.ok) return;
+                const data = await response.json();
+                const serverVersion = data.version || '0.0.0';
+                const localVersion = localStorage.getItem('appVersion') || '0.0.0';
+
+                if (serverVersion !== localVersion) {
+                    // Tampilkan notifikasi update
+                    document.getElementById('updateNotification').style.display = 'flex';
+                    // Simpan versi server agar tidak muncul lagi sampai refresh
+                    localStorage.setItem('pendingVersion', serverVersion);
+                } else {
+                    // Sembunyikan notifikasi
+                    document.getElementById('updateNotification').style.display = 'none';
+                }
+            } catch (error) {
+                console.warn('Check update failed:', error);
+            }
+        }
+
+        // Tombol refresh update
+        document.getElementById('updateBtn').addEventListener('click', function() {
+            const pendingVersion = localStorage.getItem('pendingVersion');
+            if (pendingVersion) {
+                localStorage.setItem('appVersion', pendingVersion);
+                localStorage.removeItem('pendingVersion');
+            }
+            // Force reload dari server (skip cache)
+            window.location.reload(true);
+        });
+
+        // Tutup notifikasi update
+        document.getElementById('closeUpdateBtn').addEventListener('click', function() {
+            document.getElementById('updateNotification').style.display = 'none';
+        });
+
+        // ========== INSTALL BANNER ==========
+        let deferredPrompt = null;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Tampilkan banner install
+            installBanner.style.display = 'flex';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const result = await deferredPrompt.userChoice;
+                console.log('User choice:', result);
+                deferredPrompt = null;
+                // Sembunyikan banner setelah user memilih
+                installBanner.style.display = 'none';
+            }
+        });
+
+        // Sembunyikan banner jika user sudah install
+        window.addEventListener('appinstalled', () => {
+            installBanner.style.display = 'none';
+            deferredPrompt = null;
+        });
+
+        // Tutup banner manual
+        document.getElementById('closeInstallBtn').addEventListener('click', function() {
+            installBanner.style.display = 'none';
+        });
+
+        // ========== LOAD ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cek update setelah halaman dimuat
+            checkUpdate();
+        });
+    </script>
+</body>
+</html>
